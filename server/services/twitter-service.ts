@@ -1,6 +1,7 @@
 import * as Twitter from 'twitter';
 import * as fs from 'fs'
-import moment = require('moment');
+import * as moment from 'moment';
+import { Post } from '../models/post';
 
 export class TwitterService {
     private twitter: Twitter;
@@ -25,8 +26,21 @@ export class TwitterService {
         await this.twitter.post('statuses/update', { status: message, media_ids: mediaIds })
     }
 
-    public async GetTweets() {
-        let tweets = await this.twitter.get('statuses/user_timeline', { screen_name: 'dekajoo' });
-        return tweets;
+    public async GetTweets(): Promise<Post[]> {
+        let response: Twitter.ResponseData = [];
+        try {
+            response = await this.twitter.get('statuses/user_timeline', { screen_name: 'dekajoo' });
+        } catch (e){
+            console.error(`${moment().format()}: Error getting tweet : ${JSON.stringify(e)}`);
+            return [];
+        }
+
+        return response.map((x: any) => ({
+            created_at: x.created_at,
+            id_str: x.id_str,
+            text: x.text,
+            retweet_count: x.retweet_count,
+            favourites_count: x.favourites_count
+        }));
     }
 }
