@@ -2,12 +2,15 @@
     "compilerOptions": {
         "module": "commonjs",
         "noImplicitAny": true,
-        "typeRoots": [
-            "./node_modules/@types"
-        ],
+        "strictNullChecks": true,
         "types": [ "node" ],
         "target": "es6",
-        "inlineSourceMap": true
+        "typeRoots" : ["./node_modules/@types", "./@types"],
+        "inlineSourceMap": true,
+        "baseUrl": ".",
+        "paths": {
+            "*" : ["./@types/*"]
+        }
     },
     "files": ["index.ts"]
 }
