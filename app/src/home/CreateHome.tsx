@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Post, PostService } from '../services/usePostService';
+import { Post, PostService } from '../services/PostService';
 
 const CreateHome: React.FC<{}> = () => {
   const initialPostState: Post[] = [];
@@ -7,10 +7,10 @@ const CreateHome: React.FC<{}> = () => {
   const [posts, setPosts] = useState<Post[]>(
     initialPostState
   );
-  const service = new PostService();
+  const postService = new PostService();
 
   useEffect(() => {
-    service.getPosts().then(result => {
+    postService.getPosts().then(result => {
       setPosts(result);
     });
   }, []);
