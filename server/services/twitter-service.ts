@@ -1,5 +1,6 @@
-import { Twitter, ITwitterConfig } from 'twitter-node-client';
+import * as Twitter from 'twitter';
 import * as fs from 'fs'
+import moment = require('moment');
 
 export class TwitterService {
     private twitter: Twitter;
@@ -13,15 +14,19 @@ export class TwitterService {
         this.twitter = new Twitter(config);
     }
 
-    public test() {
-        console.log("yo");
-        this.twitter.getTweet({ id: '1111111111'}, this.errorCb , (data: any) => {
-            console.log('Data [%s]', data);
-        });
-        console.log("yo2");
+    public async UploadTweet(message: string, data: Buffer | null) {
+        console.log(`${moment().format()}: Uploading tweet`);
+        let mediaIds = undefined;
+        if (data) {
+            let media = await this.twitter.post('media/upload', { media: data });
+            mediaIds = media.media_id_string
+        }
+
+        await this.twitter.post('statuses/update', { status: message, media_ids: mediaIds })
     }
 
-    private errorCb = (err: any) => {
-        console.log('ERROR [%s]', JSON.stringify(err));
+    public async GetTweets() {
+        let tweets = await this.twitter.get('statuses/user_timeline', { screen_name: 'dekajoo' });
+        return tweets;
     }
 }

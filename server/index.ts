@@ -13,7 +13,6 @@ Init();
 async function Init() {
     // Init services
     var twitterService = new TwitterService();
-    twitterService.test();
 
     // Init express server
     const app = express();
@@ -33,6 +32,18 @@ async function Init() {
     // Router
     app.get("/api/", function(req, res) {
         res.status(200).send("Welcome to our restful API");
+    });
+
+    app.post("/api/posts/", function(req, res) {
+        let message = req.body.message;
+        let imageData = req.body.imageData;
+        twitterService.UploadTweet(message, imageData);
+        res.status(200);
+    });
+
+    app.get("/api/posts/", async function(req, res) {
+        var resp = await twitterService.GetTweets();
+        res.status(200).send(resp);
     });
 
 }
