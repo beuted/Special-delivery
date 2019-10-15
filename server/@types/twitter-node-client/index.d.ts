@@ -1,5 +1,13 @@
 declare module 'twitter-node-client' {
+    export interface ITwitterConfig {
+        consumerKey: string;
+        consumerSecret: string;
+        accessToken: string;
+        accessTokenSecret: string;
+        callBackUrl: string;
+    }
     export class Twitter {
-        getTweet: Function
+        constructor(config: ITwitterConfig);
+        getTweet: Function;
     }
 }
