@@ -40,7 +40,7 @@ export class TwitterService {
             id_str: x.id_str,
             text: x.text,
             retweet_count: x.retweet_count,
-            favourites_count: x.favourites_count
+            favourites_count: x.user.favourites_count
         }));
     }
 }
