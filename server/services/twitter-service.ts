@@ -1,5 +1,5 @@
 import * as Twitter from 'twitter';
-import * as fs from 'fs'
+import * as fs from 'fs';
 import * as moment from 'moment';
 import { Post } from '../models/post';
 
@@ -7,9 +7,12 @@ export class TwitterService {
     private twitter: Twitter;
 
     constructor() {
-        let configRaw: Buffer = fs.readFileSync('./data/twitter_config.json');
-        if (configRaw == null) {
-            console.error(`Could not find "data/twitter_config.json". If you have not created it, use data/twitter_config.template.json and fill the data`);
+        let configRaw: Buffer;
+        try {
+            configRaw = fs.readFileSync('./data/twitter_config.json');
+        } catch (err) {
+            console.error(`ERROR: Could not find "data/twitter_config.json". If you have not created it, use data/twitter_config.template.json and fill the data`);
+            return;
         }
         let config = JSON.parse(<string><unknown>configRaw)
         this.twitter = new Twitter(config);
